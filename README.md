@@ -103,7 +103,7 @@ cd Pipeline_Defect_Detection_Rover
 ### 1. Run the Application
 
 ```bash
-python3 Control_Robot_Using_Webpage.py
+python3 control.py
 ```
 
 The server will automatically detect your Raspberry Pi's IP address and display it:
