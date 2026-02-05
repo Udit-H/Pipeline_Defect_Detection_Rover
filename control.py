@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, request,render_template,Response
 import RPi.GPIO as GPIO     # Import Library to access GPIO PIN
-from cv2 import *
+import cv2
 import time
 import socket
 

@@ -94,20 +94,8 @@ sudo reboot
 
 ```bash
 # Clone the repository (replace with your repo URL)
-git clone https://github.com/yourusername/Pipeline_Defect_Detection_Rover.git
+git clone https://github.com/Udit-H/Pipeline_Defect_Detection_Rover.git
 cd Pipeline_Defect_Detection_Rover
-
-# Or download and extract manually
-```
-
-### 5. Verify Directory Structure
-
-Ensure your project has the following structure:
-```
-Pipeline_Defect_Detection_Rover/
-├── Control_Robot_Using_Webpage.py
-└── templates/
-    └── temp.html
 ```
 
 ## Usage
@@ -120,7 +108,7 @@ python3 Control_Robot_Using_Webpage.py
 
 The server will automatically detect your Raspberry Pi's IP address and display it:
 ```
-Server running on: 192.168.x.x:8080
+Server running on: x.x.x.x:8080
 ```
 
 ### 2. Access the Web Interface
@@ -160,7 +148,7 @@ After=network.target
 Type=simple
 User=pi
 WorkingDirectory=/home/pi/Pipeline_Defect_Detection_Rover
-ExecStart=/usr/bin/python3 /home/pi/Pipeline_Defect_Detection_Rover/Control_Robot_Using_Webpage.py
+ExecStart=/usr/bin/python3 /home/pi/Pipeline_Defect_Detection_Rover/control.py
 Restart=on-failure
 RestartSec=10
 
