@@ -128,7 +128,6 @@ Server running on: 192.168.x.x:8080
 From any device on the same network:
 1. Open a web browser
 2. Navigate to: `http://[RASPBERRY_PI_IP]:8080`
-   - Example: `http://192.168.1.105:8080`
 
 ### 3. Control the Robot
 
@@ -236,23 +235,10 @@ Change `8080` to your desired port number.
 - [ ] Battery level monitoring
 - [ ] Recording functionality for video feed
 
-## License
-
-This project is open source and available for educational purposes.
 
 ## Contributors
 
-- RVCE Sem 2 EL Team
-
-## Acknowledgments
-
-- Built using Flask web framework
-- OpenCV for video streaming
-- RPi.GPIO for hardware control
-
+- Aprameya Muralidhara Yelanduru
+- Varshaa Pradeep
 ---
 
-**Project**: Pipeline Defect Detection Rover  
-**Institution**: RV College of Engineering  
-**Semester**: 2  
-**Department**: EL (Electronics)
