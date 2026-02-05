@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, request,render_template,Response
 import RPi.GPIO as GPIO     # Import Library to access GPIO PIN
 from cv2 import *
 import time
+import socket
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -22,7 +23,20 @@ GPIO.output(Motor_In4, False)
 
 video_capture = cv2.VideoCapture(0)
 
-Url_Address = "192.168.0.102"
+# Automatically get the local IP address
+def get_ip_address():
+    try:
+        # Create a socket connection to determine the local IP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))  # Connect to external address (doesn't actually send data)
+        ip_address = s.getsockname()[0]
+        s.close()
+        return ip_address
+    except Exception:
+        return "127.0.0.1"  # Fallback to localhost
+
+Url_Address = get_ip_address()
+print(f"Server running on: {Url_Address}:8080")
 app = Flask(__name__)
 
 
