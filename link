@@ -1,0 +1,9 @@
+Sudo apt-get update
+
+sudo apt-get upgrade
+
+sudo pip install flask
+
+sudo pip3 install flask
+
+ifconfig
