@@ -1,8 +1,15 @@
-from flask import Flask, redirect, url_for, request,render_template,Response
+from flask import Flask, redirect, url_for, request, render_template, Response
 import RPi.GPIO as GPIO     # Import Library to access GPIO PIN
 import cv2
 import time
 import socket
+from detection import (
+   apply_canny,
+   detect_cracks,
+   detect_leaks,
+   calculate_crack_percentage,
+   calculate_leak_percentage,
+)
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -41,17 +48,51 @@ app = Flask(__name__)
 
 
 def generate_frames():
-    while True:
-        result, output = video_capture.read()
-        cv2.imshow('frame', output)
-        ret, buffer = cv2.imencode('.jpg', output)
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+   while True:
+      result, output = video_capture.read()
+      if not result:
+         continue
+
+      edges = apply_canny(output)
+      cracks, contours = detect_cracks(output)
+      leaks, mask = detect_leaks(output)
+
+      crack_percent = calculate_crack_percentage(output, contours)
+      leak_percent = calculate_leak_percentage(mask)
+
+      cv2.putText(
+         cracks,
+         f"Crack %: {crack_percent:.2f}",
+         (10, 30),
+         cv2.FONT_HERSHEY_SIMPLEX,
+         0.8,
+         (0, 255, 0),
+         2,
+      )
+      cv2.putText(
+         cracks,
+         f"Leak %: {leak_percent:.2f}",
+         (10, 65),
+         cv2.FONT_HERSHEY_SIMPLEX,
+         0.8,
+         (255, 255, 255),
+         2,
+      )
+
+      overlay = cracks.copy()
+      overlay[edges == 0] = [0, 0, 0]
+
+      ret, buffer = cv2.imencode('.jpg', overlay)
+      if not ret:
+         continue
+      frame = buffer.tobytes()
+      yield (
+         b'--frame\r\n'
+         b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
+      )
         
 @app.route('/video_feed')
 def video_feed():
-    print ("Error: unable to fecth data")
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

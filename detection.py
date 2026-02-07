@@ -91,54 +91,55 @@ def apply_canny(image):
     return edges
 
 
-cap = cv2.VideoCapture(0)  # or use a video file
-cv2.namedWindow("Crack detection", cv2.WINDOW_NORMAL)
-cv2.resizeWindow("Crack detection", 800, 600)
+if __name__ == "__main__":
+    cap = cv2.VideoCapture(0)  # or use a video file
+    cv2.namedWindow("Crack detection", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Crack detection", 800, 600)
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-    edges = apply_canny(frame)
-    cracks, contours = detect_cracks(frame)  # Get contours for calculation
-    leaks, mask = detect_leaks(frame)  # Get mask for calculation
+        edges = apply_canny(frame)
+        cracks, contours = detect_cracks(frame)  # Get contours for calculation
+        leaks, mask = detect_leaks(frame)  # Get mask for calculation
 
-    # Calculate percentages
-    crack_percent = calculate_crack_percentage(frame, contours)
-    leak_percent = calculate_leak_percentage(mask)
+        # Calculate percentages
+        crack_percent = calculate_crack_percentage(frame, contours)
+        leak_percent = calculate_leak_percentage(mask)
 
-    # Add text tags on the frames
-    cv2.putText(
-        cracks,
-        f"Crack %: {crack_percent:.2f}",
-        (10, 30),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.8,
-        (0, 255, 0),
-        2,
-    )
-    cv2.putText(
-        leaks,
-        f"Leak %: {leak_percent:.2f}",
-        (10, 30),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        1,
-        (255, 255, 255),
-        2,
-    )
+        # Add text tags on the frames
+        cv2.putText(
+            cracks,
+            f"Crack %: {crack_percent:.2f}",
+            (10, 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (0, 255, 0),
+            2,
+        )
+        cv2.putText(
+            leaks,
+            f"Leak %: {leak_percent:.2f}",
+            (10, 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 255, 255),
+            2,
+        )
 
-    overlay = frame.copy()
-    # make the whole screen black like before but add red for edges
-    overlay[edges == 0] = [0, 0, 0]
+        overlay = frame.copy()
+        # make the whole screen black like before but add red for edges
+        overlay[edges == 0] = [0, 0, 0]
 
-    # cv2.imshow("Canny Edges", edges)
-    # cv2.imshow("Overlay Edges", overlay)
-    # cv2.imshow("Leak detections", leaks)
-    cv2.imshow("Crack detection", cracks)
+        # cv2.imshow("Canny Edges", edges)
+        # cv2.imshow("Overlay Edges", overlay)
+        # cv2.imshow("Leak detections", leaks)
+        cv2.imshow("Crack detection", cracks)
 
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
 
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
