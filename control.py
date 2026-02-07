@@ -48,11 +48,12 @@ app = Flask(__name__)
 
 
 def generate_frames():
-   while True:
-      result, output = video_capture.read()
+    while True:
+        result, output = video_capture.read()
       if not result:
          continue
 
+      edges = apply_canny(output)
       cracks, contours = detect_cracks(output)
       leaks, mask = detect_leaks(output)
 
@@ -78,17 +79,19 @@ def generate_frames():
          2,
       )
 
-      ret, buffer = cv2.imencode('.jpg', cracks)
+      overlay = cracks.copy()
+      overlay[edges == 0] = [0, 0, 0]
+
+      ret, buffer = cv2.imencode('.jpg', overlay)
       if not ret:
          continue
-      frame = buffer.tobytes()
-      yield (
-         b'--frame\r\n'
-         b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
-      )
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         
 @app.route('/video_feed')
 def video_feed():
+    print ("Error: unable to fecth data")
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
