@@ -1,15 +1,16 @@
 # Pipeline Defect Detection Rover
 
-A web-based remote control system for a Raspberry Pi robot with live video streaming. This project allows you to control a robot's movements (forward, backward, left, right, stop) through a web interface while viewing real-time video feed from the robot's camera.
+A web-based remote control system for a Raspberry Pi robot with live video streaming. This project allows you to control a robot's movements (forward, backward, left, right, stop) through a web interface while viewing a real-time **processed** video feed from the robot's camera (crack/leak overlays).
 
 ## Features
 
 - **Web-based Control Interface**: Control the robot from any device with a web browser
-- **Live Video Streaming**: Real-time video feed from the robot's camera via MJPEG streaming
+- **Live Video Streaming**: Real-time MJPEG stream with OpenCV crack/leak overlays in the browser
 - **Automatic IP Detection**: Dynamically detects the Raspberry Pi's local IP address - no hardcoding needed
 - **Motor Control**: 4-direction movement control (Forward, Backward, Left, Right) with Stop functionality
 - **Responsive Design**: Grid-based button layout with hover effects for intuitive control
 - **Multi-threaded**: Flask server runs with threading enabled for smooth operation
+
 
 ## Hardware Requirements
 
@@ -93,17 +94,17 @@ sudo reboot
 ### 4. Clone/Download the Project
 
 ```bash
-# Clone the repository (replace with your repo URL)
+# Clone the repository 
 git clone https://github.com/Udit-H/Pipeline_Defect_Detection_Rover.git
 cd Pipeline_Defect_Detection_Rover
 ```
 
 ## Usage
 
-### 1. Run the Application
+### 1. Run the Application (Single Process)
 
 ```bash
-python3 control.py
+python3 main.py
 ```
 
 The server will automatically detect your Raspberry Pi's IP address and display it:
@@ -125,7 +126,7 @@ From any device on the same network:
 - **Right**: Turn robot right
 - **Stop**: Stop all motors
 
-The interface also displays the live video feed from the camera.
+The interface displays the processed live stream with crack/leak percentages.
 
 ## Auto-Start on Boot (Optional)
 
@@ -173,6 +174,9 @@ sudo systemctl status robot-control.service
 - Verify camera connection: `vcgencmd get_camera`
 - Try `raspistill -o test.jpg` to test camera
 - Change camera index in code: `cv2.VideoCapture(0)` → `cv2.VideoCapture(1)`
+
+### OpenCV Window Pops Up on the Pi
+The detection window is only shown when you run `detection.py` directly. For normal use, run only `main.py`.
 
 ### GPIO Permission Issues
 - Add your user to the GPIO group:
