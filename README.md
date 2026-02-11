@@ -136,22 +136,22 @@ To run the script automatically when the Raspberry Pi boots:
 
 1. Create a service file:
 ```bash
-sudo nano /etc/systemd/system/robot-control.service
+sudo nano /etc/systemd/system/pipeline-rover.service
 ```
 
 2. Add the following content:
 ```ini
 [Unit]
-Description=Robot Web Control Service
+Description=Pipeline Rover Flask Service
 After=network.target
 
 [Service]
 Type=simple
 User=pi
 WorkingDirectory=/home/pi/Pipeline_Defect_Detection_Rover
-ExecStart=/usr/bin/python3 /home/pi/Pipeline_Defect_Detection_Rover/control.py
+ExecStart=/usr/bin/python3 /home/pi/Pipeline_Defect_Detection_Rover/main.py
 Restart=on-failure
-RestartSec=10
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
@@ -159,13 +159,27 @@ WantedBy=multi-user.target
 
 3. Enable and start the service:
 ```bash
-sudo systemctl enable robot-control.service
-sudo systemctl start robot-control.service
+sudo systemctl enable pipeline-rover.service
+sudo systemctl start pipeline-rover.service
 ```
 
 4. Check status:
 ```bash
-sudo systemctl status robot-control.service
+sudo systemctl status pipeline-rover.service
+```
+
+### Disable Auto-Start (Later)
+
+Stop and disable the service:
+```bash
+sudo systemctl stop pipeline-rover.service
+sudo systemctl disable pipeline-rover.service
+```
+
+To remove it completely:
+```bash
+sudo rm /etc/systemd/system/pipeline-rover.service
+sudo systemctl daemon-reload
 ```
 
 ## Troubleshooting
