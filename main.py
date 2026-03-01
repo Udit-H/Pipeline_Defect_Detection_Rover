@@ -35,7 +35,7 @@ def get_ip_address():
     try:
         # Create a socket connection to determine the local IP
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))  # Connect to external address (doesn't actually send data)
+        s.connect(("8.8.8.8", 80))  # Connect to external address
         ip_address = s.getsockname()[0]
         s.close()
         return ip_address
